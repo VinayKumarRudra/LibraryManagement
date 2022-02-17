@@ -15,4 +15,18 @@
 		  
   </servlet-mapping>
   
+  <servlet>
+  		
+  		<servlet-name>get book by name</servlet-name>
+  		<servlet-class>library.servlet.GetBookbyName</servlet-class>
+  		
+  </servlet>
+  
+  <servlet-mapping>
+  		
+  		<servlet-name>get book by name</servlet-name>
+  		<url-pattern>/v1/books/BookDetails</url-pattern>
+  		
+  </servlet-mapping>
+  
 </web-app>
