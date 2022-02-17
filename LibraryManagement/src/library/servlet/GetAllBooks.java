@@ -9,8 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import library.GetBookList;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import library.GetBookList;
 /**
  * Servlet implementation class GetAllBooks
  */
@@ -30,12 +31,25 @@ public class GetAllBooks extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		GetBookList.getBookList();
+		
 		PrintWriter out = response.getWriter();
-		//out.println("<table>");
+		boolean over = false;
 		
 		
 		int pageid = Integer.parseInt(request.getParameter("page"));
 		int per_page = Integer.parseInt(request.getParameter("per_page"));
+		
+		int totalrecords = GetBookList.row_number-1;
+		int totalpages = 0;
+		int pagenumber = pageid;
+		
+		totalpages = totalrecords/per_page;
+		if(totalrecords > totalpages*per_page) {
+			totalpages = totalpages+1;
+		}
+		
 		
 		if(pageid == 1) {
 			
@@ -44,17 +58,15 @@ public class GetAllBooks extends HttpServlet {
 			pageid = pageid-1;
 			pageid = pageid*per_page+1;
 		}
-		
-		GetBookList.getBookList();
-		
-		int totalrecords = GetBookList.row_number-1;
 
-		for(int i=pageid-1;i<pageid+per_page-1;i++) {
-			if(i<totalrecords) {
-				//out.print("<tr><td>");
-				out.println(GetBookList.map_book.get(i));
-				//out.println("</td></tr>");
-			}
+		if(pagenumber <= totalpages) {
+			for(int i=pageid-1;i<pageid+per_page-1;i++) {
+				if(i<totalrecords) {
+					out.println(GetBookList.map_book.get(i));
+				}
+			} 
+		} else{
+			 response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 		}
 		
 		
