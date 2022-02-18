@@ -15,10 +15,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class LibraryGetBookById {
 	
-	public static String getBook(String bookname) throws IOException {
+	public static String getBook(String bookid) throws IOException {
 		
 		Library lib = new Library();
-		int row_number = RowNumber.getBookById(bookname);
+		int row_number = RowNumber.getBookById(bookid);
 		
 		if(row_number == 0) {
 			return null;
@@ -44,34 +44,38 @@ public class LibraryGetBookById {
     					String cellValue = dataFormatter.formatCellValue(cell);
     					
     					if(count == 1) {
-    						lib.setName(cellValue);
+    						lib.setBookId(cellValue);
     					}
     					
     					if(count == 2) {
-    						lib.setAuthor(cellValue);
+    						lib.setName(cellValue);
     					}
     					
     					if(count == 3) {
-    						lib.setTitle(cellValue);
+    						lib.setAuthor(cellValue);
     					}
     					
     					if(count == 4) {
-    						lib.setEdition(cellValue);
+    						lib.setTitle(cellValue);
     					}
     					
     					if(count == 5) {
-    						lib.setPageCount(cellValue);
+    						lib.setEdition(cellValue);
     					}
     					
     					if(count == 6) {
-    						lib.setPublisher(cellValue);
+    						lib.setPageCount(cellValue);
     					}
     					
     					if(count == 7) {
-    						lib.setPublishedDate(cellValue);
+    						lib.setPublisher(cellValue);
     					}
     					
     					if(count == 8) {
+    						lib.setPublishedDate(cellValue);
+    					}
+    					
+    					if(count ==9) {
     						lib.setRate(cellValue);
     					}
 
