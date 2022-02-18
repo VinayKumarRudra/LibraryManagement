@@ -12,7 +12,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class RowNumber {
-	public static int getBookById(String bookname) throws IOException {
+	public static int getBookById(String bookid) throws IOException {
 		Library lib = new Library();
 		int row_number = 0;
 		
@@ -32,9 +32,9 @@ public class RowNumber {
         		while (cellIterator.hasNext()) {
         			
         			Cell cell = cellIterator.next();
-        			String book_name = dataFormatter.formatCellValue(cell);
+        			String book_id = dataFormatter.formatCellValue(cell);
         			
-        			if(book_name.equals(bookname)) {
+        			if(book_id.equals(bookid)) {
         				row_number = row.getRowNum();
         			}
         		}
