@@ -51,7 +51,15 @@ public class UpdateBook extends HttpServlet {
 	    ObjectMapper objectMapper = new ObjectMapper();
 	    Library lib = objectMapper.readValue(object.toString(),Library.class);
 	    
-		LibraryUpdateBook.updateBook(book_id,key,lib);
+		int status = LibraryUpdateBook.updateBook(book_id,key,lib);
+		
+		PrintWriter out = response.getWriter();
+		if(status ==1 ) {
+			out.println("Updated successfully");
+			response.setStatus(HttpServletResponse.SC_OK);
+		} else {
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+		}
 	}
 	
 	
