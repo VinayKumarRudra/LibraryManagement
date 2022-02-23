@@ -2,6 +2,7 @@ package library.servlet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Iterator;
 
 import javax.servlet.ServletException;
@@ -10,12 +11,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import library.Library;
+import library.LibraryDeleteBook;
 import library.LibraryUpdateBook;
 
 /**
@@ -52,5 +53,26 @@ public class UpdateBook extends HttpServlet {
 	    
 		LibraryUpdateBook.updateBook(book_id,key,lib);
 	}
+	
+	
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String path =request.getRequestURI().substring(request.getContextPath().length());
+		String[] pathsegment = path.split("/");
+		String book_id = pathsegment[pathsegment.length-1];
+		
+		int status = LibraryDeleteBook.deleteBook(book_id);
+		
+		PrintWriter out = response.getWriter();
+		if(status == 1) {
+			out.println("Book deleted successfully");
+			response.setStatus(HttpServletResponse.SC_OK);
+		}
+		else {
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+		}
+	}
 
 }
+
+
+
