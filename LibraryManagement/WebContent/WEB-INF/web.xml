@@ -1,32 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
   
+    
   <servlet>
   
-  		<servlet-name>list books</servlet-name>
-  		<servlet-class>library.servlet.GetAllBooks</servlet-class>
+  		<servlet-name>Get particular book,Delete Book,Update Book</servlet-name>
+  		<servlet-class>library.servlet.Library2</servlet-class>
   
   </servlet>
   
   <servlet-mapping>
   
-  		<servlet-name>list books</servlet-name>
+  		<servlet-name>Get particular book,Delete Book,Update Book</servlet-name>
+		<url-pattern>/v1/books/*</url-pattern>
+		  
+  </servlet-mapping>
+  
+  
+
+  <servlet>
+  
+  		<servlet-name>Add book,Get all books</servlet-name>
+  		<servlet-class>library.servlet.Library1</servlet-class>
+  
+  </servlet>
+  
+  <servlet-mapping>
+  
+  		<servlet-name>Add book,Get all books</servlet-name>
 		<url-pattern>/v1/books</url-pattern>
 		  
   </servlet-mapping>
   
-  <servlet>
-  		
-  		<servlet-name>get book by name</servlet-name>
-  		<servlet-class>library.servlet.GetBookbyName</servlet-class>
-  		
-  </servlet>
-  
-  <servlet-mapping>
-  		
-  		<servlet-name>get book by name</servlet-name>
-  		<url-pattern>/v1/books/*</url-pattern>
-  		
-  </servlet-mapping>
-  
+
 </web-app>
