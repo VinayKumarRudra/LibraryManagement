@@ -74,14 +74,21 @@ public class Library2 extends HttpServlet {
 	    ObjectMapper objectMapper = new ObjectMapper();
 	    Library lib = objectMapper.readValue(object.toString(),Library.class);
 	    
-		int status = LibraryUpdateBook.updateBook(book_id,key,lib);
-		
-		PrintWriter out = response.getWriter();
-		if(status ==1 ) {
-			out.println("Updated successfully");
-			response.setStatus(HttpServletResponse.SC_OK);
-		} else {
-			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+	    //System.out.println(book_id+"   "+key);
+	    
+		int status;
+		try {
+			status = LibraryUpdateBook.updateBook(book_id,key,lib);
+			PrintWriter out = response.getWriter();
+			if(status ==1 ) {
+				out.println("Updated successfully");
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}
