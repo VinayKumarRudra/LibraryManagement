@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryGetAllBook {
-public static List<String> getBooks(int pageid,int per_page) throws IOException {
+public static List<String> getBooks(int pageid,int per_page) throws Exception {
 		
 		List<String> list=new ArrayList<String>();  
 		
 		GetBookList.getBookList();
-		int totalrecords = GetBookList.row_number-1;
+		int totalrecords = GetBookList.row_number;
 		int totalpages = 0;
 		int pagenumber = pageid;
 		

@@ -1,19 +1,13 @@
 //$Id$
 package library;
 
-import library.Library;
-
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -21,77 +15,56 @@ public class GetBookList {
 	public static List map_book = new ArrayList();
 	public static int row_number;
 	
-	public static void getBookList() throws IOException {
-		
+	public static void getBookList() throws IOException, Exception {
 		Library lib = new Library();
 		
-		int num = 1;
+		String url = "jdbc:mysql://localhost:3306/sample";
+		String uname = "root";
+		String pass = "vinay";
+		 
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con = DriverManager.getConnection(url,uname,pass);
+		Statement st = con.createStatement();
 		
-        FileInputStream file = new FileInputStream("/home/local/ZOHOCORP/vinay-pt4139/Downloads/books.xlsx");
-        XSSFWorkbook book = new XSSFWorkbook(file);
-        
-        DataFormatter dataFormatter = new DataFormatter();
-        Iterator<Sheet> sheets = book.sheetIterator();
-        
-        while(sheets.hasNext()) {
-        	Sheet sh = sheets.next();
-       
-        	row_number = sh.getLastRowNum()+1;
-			int column_number = sh.getRow(0).getLastCellNum();
+		String query = "select count(*) from temp2";
+		ResultSet res = st.executeQuery(query);
+		res.next();
+		row_number = res.getInt(1);
+		
+		query = "select book_id,book_name,author_name,title,edition,pagenumber,publisher,publishedDate from temp2 inner join temp1 using(author_id);";
+		ResultSet rs = st.executeQuery(query);
+		while(rs.next()) {
+			int book_id = rs.getInt(1);
+			String str = String.valueOf(book_id);
+			lib.setBookId(str);
 			
-			Iterator<Row> iterator =  sh.iterator();
-			while(iterator.hasNext()) {
-				Row row = iterator.next();
-				if(row.getRowNum() == 0) {
-					continue;	
-				}
-				Iterator<Cell> cellIterator = row.iterator();
-				int count = 1;
-				while (cellIterator.hasNext()) {
-					Cell cell = cellIterator.next();
-					String cellValue = dataFormatter.formatCellValue(cell);
-					
-					if(count == 1) {
-						lib.setName(cellValue);
-					}
-					
-					if(count == 2) {
-						lib.setAuthor(cellValue);
-					}
-					
-					if(count == 3) {
-						lib.setTitle(cellValue);
-					}
-					
-					if(count == 4) {
-						lib.setEdition(cellValue);
-					}
-					
-					if(count == 5) {
-						lib.setPageCount(cellValue);
-					}
-					
-					if(count == 6) {
-						lib.setPublisher(cellValue);
-					}
-					
-					if(count == 7) {
-						lib.setPublishedDate(cellValue);
-					}
-					
-					if(count == 8) {
-						lib.setRate(cellValue);
-					}
-
-					count++;
-				}
-				
-				ObjectMapper obj = new ObjectMapper();
-				String json =  obj.writeValueAsString(lib);
-				
-				map_book.add(json);
-			}
+			lib.setName(rs.getString(2));
 			
-        }
+			lib.setAuthor(rs.getString(3));
+			
+			lib.setTitle(rs.getString(4));
+			
+			int edition = rs.getInt(5);
+			str = String.valueOf(edition);
+			lib.setEdition(str);
+			
+			int pagenumber = rs.getInt(6);
+			str = String.valueOf(pagenumber);
+			lib.setPageCount(str);
+			
+			lib.setPublisher(rs.getString(7));
+			
+			java.sql.Date sqldate = rs.getDate(8);
+			str = sqldate.toString();
+			lib.setPublishedDate(str);
+			
+			ObjectMapper obj = new ObjectMapper();
+			String json =  obj.writeValueAsString(lib);
+			
+			map_book.add(json);
+		}
+		st.close();
+		con.close();
+		//System.out.println(map_book);
 	}
 }
