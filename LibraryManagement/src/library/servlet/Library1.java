@@ -28,14 +28,18 @@ public class Library1 extends HttpServlet {
 		int pageid = Integer.parseInt(request.getParameter("page"));
 		int per_page = Integer.parseInt(request.getParameter("per_page"));
 		
-		List<String> list = LibraryGetAllBook.getBooks(pageid,per_page);
-		
-		PrintWriter out = response.getWriter();
-		
-		if(list.isEmpty()) {
-			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-		} else {
-			out.println(list);
+		List<String> list;
+		try {
+			list = LibraryGetAllBook.getBooks(pageid,per_page);
+			PrintWriter out = response.getWriter();
+			
+			if(list.isEmpty()) {
+				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			} else {
+				out.println(list);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -61,6 +65,8 @@ public class Library1 extends HttpServlet {
 		try {
 			status = LibraryAddBook.addBook(lib);
 		} catch (ParseException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
