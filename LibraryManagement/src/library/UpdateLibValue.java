@@ -7,40 +7,36 @@ public class UpdateLibValue {
 		
 		String value = "";
 		
-		if(index == 0) {
+		if(index == 1) {
 			value = lib.getBookId();
 		}
 		
-		if(index == 1) {
+		if(index == 2) {
 			value = lib.getName();
 		}
 		
-		if(index == 2) {
+		if(index == 3) {
 			value = lib.getAuthor();
 		}
 		
-		if(index == 3) {
+		if(index == 4) {
 			value = lib.getTitle();
 		}
 		
-		if(index == 4) {
+		if(index == 5) {
 			value = lib.getEdition();
 		}
 		
-		if(index == 5) {
+		if(index == 6) {
 			value = lib.getPageCount();
 		}
 		
-		if(index == 6) {
+		if(index == 7) {
 			value = lib.getPublisher();
 		}
 		
-		if(index == 7) {
-			value = lib.getPublishedDate();
-		}
-		
 		if(index == 8) {
-			value = lib.getRate();
+			value = lib.getPublishedDate();
 		}
 		
 		return value;
