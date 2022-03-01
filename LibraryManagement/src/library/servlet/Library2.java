@@ -30,14 +30,20 @@ public class Library2 extends HttpServlet {
 		String book_id = pathsegment[pathsegment.length-1];
 		
 		
-		String reqbook = LibraryGetBookById.getBook(book_id); 
-		
-		PrintWriter out = response.getWriter();
-		if(reqbook == null) {
-			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-		} else {
-			out.println(reqbook);
-		}
+		String reqbook;
+		try {
+			reqbook = LibraryGetBookById.getBook(book_id);
+			
+			PrintWriter out = response.getWriter();
+			if(reqbook == null) {
+				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			} else {
+				out.println(reqbook);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 		
 	}
 
