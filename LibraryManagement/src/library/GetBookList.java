@@ -31,7 +31,7 @@ public class GetBookList {
 		res.next();
 		row_number = res.getInt(1);
 		
-		query = "select book_id,book_name,author_name,title,edition,pagenumber,publisher,publishedDate from temp2 inner join temp1 using(author_id);";
+		query = "select book_id,book_name,author_name,title,edition,pagenumber,publisher,publishedDate from temp2 left join temp1 on temp2.author_id=temp1.author_id";
 		ResultSet rs = st.executeQuery(query);
 		while(rs.next()) {
 			int book_id = rs.getInt(1);
@@ -65,6 +65,5 @@ public class GetBookList {
 		}
 		st.close();
 		con.close();
-		//System.out.println(map_book);
 	}
 }
