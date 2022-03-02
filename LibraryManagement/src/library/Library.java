@@ -1,14 +1,18 @@
 //$Id$
 package library;
 
+import java.util.Date;
+
 public class Library {
+	private String book_id;
 	private String name;
 	private String author;
 	private String title;
 	private String edition;
 	private String publisher;
-	private String published_date;
-	private String no_of_pages,rate;
+	private String publishedDate;
+	private String pageCount;
+	//private String rate;
 	
 	public String getName() {
 		return name;
@@ -46,23 +50,31 @@ public class Library {
 	}
 	
 	public String getPublishedDate() {
-		return published_date;
+		return publishedDate;
 	}
 	public void setPublishedDate(String published_date) {
-		this.published_date = published_date;
+		this.publishedDate = published_date;
 	}
 	
-	public String getRate() {
+	/*public String getRate() {
 		return rate;
 	}
 	public void setRate(String rate) {
 		this.rate = rate;
-	}
+	}*/
 	
 	public String getPageCount() {
-		return no_of_pages;
+		return pageCount;
 	}
 	public void setPageCount(String cellValue) {
-		this.no_of_pages = cellValue;
+		this.pageCount = cellValue;
 	}
+	
+	public String getBookId() {
+		return book_id;
+	}
+	public void setBookId(String book_id) {
+		this.book_id = book_id;
+	}
+	
 }

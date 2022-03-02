@@ -17,7 +17,7 @@ public class RowNumber {
 		int row_number = 0;
 		
 		
-		FileInputStream file = new FileInputStream("/home/local/ZOHOCORP/vinay-pt4139/Downloads/books.xlsx");
+		FileInputStream file = new FileInputStream("/home/local/ZOHOCORP/vinay-pt4139/Downloads/book1.xlsx");
 		XSSFWorkbook book = new XSSFWorkbook(file);
 		
 		DataFormatter dataFormatter = new DataFormatter();
@@ -32,7 +32,8 @@ public class RowNumber {
         		while (cellIterator.hasNext()) {
         			
         			Cell cell = cellIterator.next();
-        			String book_id = dataFormatter.formatCellValue(cell);
+        			String book_id = (String) dataFormatter.formatCellValue(cell);
+        			
         			
         			if(book_id.equals(bookid)) {
         				row_number = row.getRowNum();

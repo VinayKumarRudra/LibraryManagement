@@ -1,20 +1,21 @@
 //$Id$
 package library;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LibraryAddBook {
 
-	public static int addBook(Library lib) throws Exception {
+	public static List post = new ArrayList();
+	public static List<String> addBook(Library lib) throws Exception {
 		
-		int value = 0;
+		//int value = 0;
 		
 		String url = "jdbc:mysql://localhost:3306/sample";
 		String uname = "root";
@@ -105,10 +106,13 @@ public class LibraryAddBook {
 			psb.close();
 			st.close();
 			con.close();
-			return insertstatus;
+			//return insertstatus;
 		}
 		
-		return insertstatus;
+		post.add(book_id);
+		post.add(insertstatus);
+		
+		return post;
 	}
 
 }

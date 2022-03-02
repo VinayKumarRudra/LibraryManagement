@@ -30,7 +30,6 @@ public class LibraryUpdateBook {
 		String pass = "vinay";
 		 
 		int index = Index.getIndex(lib, key);
-		System.out.println(key+"  "+index);
 		
 		
 		Class.forName("com.mysql.jdbc.Driver");
@@ -38,23 +37,63 @@ public class LibraryUpdateBook {
 		
 		if(key.equals("author")) {
 			String value = UpdateLibValue.getValue(index, lib);
-			
-			String query = "select author_id from temp2 where book_id ='"+book_id+"'";
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery(query);
-			if(rs.next()) {
-				int authorid = rs.getInt(1);
-				System.out.println(authorid);
-				String str = String.valueOf(authorid);
-				PreparedStatement ps=con.prepareStatement("update temp1 set author_name =? where author_id =?");
-				ps.setString(1,value);
-				ps.setString(2,str);
-				status=ps.executeUpdate();
-				ps.close();
+			int author_status = 0;
+			String getquery = "select author_id from temp2 where book_id = '"+book_id+"'";
+			Statement pst = con.createStatement();
+			ResultSet prs = pst.executeQuery(getquery);
+			int pre_author_id;
+			if(prs.next()) {
+				pre_author_id = prs.getInt(1);
 			} else {
-				status = 0;
+				return 0;
 			}
 			
+			
+			String query = "select author_id from temp1 where author_name = '"+value+"'";
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			
+			if(rs.next()) {
+				
+				int author_id = rs.getInt("author_id");
+				PreparedStatement ps=con.prepareStatement("update temp2 set author_id =? where book_id =?");
+				ps.setInt(1,author_id);
+				ps.setString(2,book_id);
+				status = ps.executeUpdate();
+				ps.close();
+				
+			}else {
+				query = "select author_id from temp1 ORDER BY author_id DESC LIMIT 1";
+				ResultSet res = st.executeQuery(query);
+				res = st.executeQuery(query);
+				res.next();
+				int author_id = res.getInt("author_id");
+				author_id = author_id+1;
+				
+				PreparedStatement psa = con.prepareStatement("insert into temp1 values(?,?)");
+				psa.setInt(1,author_id);
+				psa.setString(2,value);
+				psa.executeUpdate();
+				psa.close();
+				
+				PreparedStatement ps=con.prepareStatement("update temp2 set author_id =? where book_id =?");
+				ps.setInt(1,author_id);
+				ps.setString(2,book_id);
+				status = ps.executeUpdate();
+				ps.close();
+			}
+			
+			st.close();
+			query = "select book_id from temp2 where author_id='"+pre_author_id+"'";
+			Statement cst = con.createStatement();
+			ResultSet crs = cst.executeQuery(query);
+			if(crs.next()) {
+				
+			}else {
+				PreparedStatement cps=con.prepareStatement("delete from temp1 where author_id =?");
+				cps.setInt(1,pre_author_id);
+				cps.executeUpdate();
+			}
 			
 		}  
 		
