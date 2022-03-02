@@ -98,16 +98,24 @@ public class Library2 extends HttpServlet {
 		String[] pathsegment = path.split("/");
 		String book_id = pathsegment[pathsegment.length-1];
 		
-		int status = LibraryDeleteBook.deleteBook(book_id);
+		int status;
+		try {
+			status = LibraryDeleteBook.deleteBook(book_id);
+			
+			PrintWriter out = response.getWriter();
+			if(status == 1) {
+				out.println("Book deleted successfully");
+				response.setStatus(HttpServletResponse.SC_OK);
+			}
+			else {
+				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			}
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
 		
-		PrintWriter out = response.getWriter();
-		if(status == 1) {
-			out.println("Book deleted successfully");
-			response.setStatus(HttpServletResponse.SC_OK);
-		}
-		else {
-			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-		}
 	}
 
 }
