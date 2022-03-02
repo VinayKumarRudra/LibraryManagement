@@ -19,6 +19,7 @@ import library.Library;
 import library.LibraryDeleteBook;
 import library.LibraryGetBookById;
 import library.LibraryUpdateBook;
+import library.Response;
 
 @WebServlet("/Library2")
 public class Library2 extends HttpServlet {
@@ -36,6 +37,16 @@ public class Library2 extends HttpServlet {
 			
 			PrintWriter out = response.getWriter();
 			if(reqbook == null) {
+				Response res = new Response();
+				res.setStatuscode(204);
+				res.setField("book id");
+				res.setMessage("book doesn't exist");
+				res.setStatus("204 No Content");
+				
+				ObjectMapper obj = new ObjectMapper();
+				String json =  obj.writeValueAsString(res);
+				
+				out.println(json);
 				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 			} else {
 				out.println(reqbook);
@@ -69,25 +80,58 @@ public class Library2 extends HttpServlet {
 	    String value = "";
 	    while(k.hasNext()) {
 	         key = k.next();
+	         value = object.getString (key);
 	      }
 	    
 	    ObjectMapper objectMapper = new ObjectMapper();
 	    Library lib = objectMapper.readValue(object.toString(),Library.class);
 	    
-	    //System.out.println(book_id+"   "+key);
 	    
 		int status;
 		try {
-			status = LibraryUpdateBook.updateBook(book_id,key,lib);
-			PrintWriter out = response.getWriter();
-			if(status ==1 ) {
-				out.println("Updated successfully");
-				response.setStatus(HttpServletResponse.SC_OK);
-			} else {
-				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			if(value.isEmpty()) {
+				Response res = new Response();
+				res.setStatuscode(400);
+				res.setField(key);
+				res.setMessage("please enter value for field");
+				res.setStatus("400 Bad request");
+				
+				ObjectMapper obj = new ObjectMapper();
+				String json =  obj.writeValueAsString(res);
+				PrintWriter out = response.getWriter();
+				out.println(json);
+		    	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+		    	
+			}else {
+				status = LibraryUpdateBook.updateBook(book_id,key,lib);
+				PrintWriter out = response.getWriter();
+				 if(status ==1 ) {
+					Response res = new Response();
+					res.setStatuscode(200);
+					res.setField("no issues");
+					res.setMessage("Successfully updated");
+					res.setStatus("200 OK request");
+					
+					ObjectMapper obj = new ObjectMapper();
+					String json =  obj.writeValueAsString(res);
+					
+					out.println(json);
+					response.setStatus(HttpServletResponse.SC_OK);
+				}  else {
+					Response res = new Response();
+					res.setStatuscode(204);
+					res.setField("book id");
+					res.setMessage("book doesn't exist");
+					res.setStatus("204 No Content");
+					
+					ObjectMapper obj = new ObjectMapper();
+					String json =  obj.writeValueAsString(res);
+					
+					out.println(json);
+					//response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+				}
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -104,10 +148,29 @@ public class Library2 extends HttpServlet {
 			
 			PrintWriter out = response.getWriter();
 			if(status == 1) {
-				out.println("Book deleted successfully");
+				Response res = new Response();
+				res.setStatuscode(200);
+				res.setField("no issues");
+				res.setMessage("Successfully deleted");
+				res.setStatus("200 OK request");
+				
+				ObjectMapper obj = new ObjectMapper();
+				String json =  obj.writeValueAsString(res);
+				
+				out.println(json);
 				response.setStatus(HttpServletResponse.SC_OK);
 			}
 			else {
+				Response res = new Response();
+				res.setStatuscode(204);
+				res.setField("book id");
+				res.setMessage("book doesn't exist");
+				res.setStatus("204 No Content");
+				
+				ObjectMapper obj = new ObjectMapper();
+				String json =  obj.writeValueAsString(res);
+				
+				out.println(json);
 				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 			}
 			
